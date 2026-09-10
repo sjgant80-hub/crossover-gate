@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crossover Gate — the skeptic's instrument</title>
+<meta name="description" content="A falsification gate for a 'special number' claim: does a crossover cluster at the predicted value, or would any value fit noise? Surrogate testing that tries to kill the claim.">
+<style>
+  :root{
+    --bg:#0b0e13; --panel:#141a22; --panel2:#1a2230; --line:#28313f;
+    --ink:#e8eef4; --dim:#8a97a6; --accent:#8ab4ff; --bad:#ff6b6b; --warn:#e0b341; --good:#4fd28f;
+    --chip:#1b2330; --mono:ui-monospace,SFMono-Regular,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0}
+  body{background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,Segoe UI,Roboto,sans-serif;padding:0 0 4rem}
+  .wrap{max-width:860px;margin:0 auto;padding:0 1.25rem}
+  header{padding:3rem 0 1.6rem;border-bottom:1px solid var(--line)}
+  h1{font-size:1.9rem}
+  .sub{color:var(--dim);margin-top:.5rem;max-width:46rem}
+  h2{font-size:1.15rem;margin:2rem 0 .8rem}
+  .thesis{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:8px;padding:1rem 1.2rem;margin:1.4rem 0;color:var(--dim)}
+  .thesis strong{color:var(--ink)}
+  .thesis.wall{border-left-color:var(--warn)}
+  .demo{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:1.1rem;margin:.8rem 0}
+  .demo label{display:block;font-size:.82rem;color:var(--dim);margin:.4rem 0 .15rem}
+  .row{display:flex;flex-wrap:wrap;gap:1rem;align-items:flex-end}
+  input,select{background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:.4rem .6rem;font:.9rem var(--mono);max-width:260px}
+  .presets{display:flex;gap:.6rem;flex-wrap:wrap;margin:.2rem 0 .6rem}
+  .presets button{background:var(--chip);color:var(--dim);border:1px solid var(--line);border-radius:6px;font-size:.8rem;font-weight:600;padding:.35rem .8rem;cursor:pointer}
+  button.go{background:var(--accent);color:#04142e;border:0;border-radius:8px;padding:.6rem 1.3rem;font-weight:800;cursor:pointer;margin-top:.6rem}
+  button:hover{filter:brightness(1.1)}
+  .out{font:.92rem/1.5 var(--mono);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:.8rem 1rem;margin-top:.8rem;white-space:pre-wrap;color:var(--dim)}
+  .v-signal{color:var(--good);font-weight:700}
+  .v-null-indistinguishable{color:var(--bad);font-weight:700}
+  .v-off-band{color:var(--warn);font-weight:700}
+  code{font:.88em var(--mono);background:var(--chip);padding:.08em .35em;border-radius:4px}
+  footer{margin-top:3rem;padding-top:1.4rem;border-top:1px solid var(--line);color:var(--dim);font-size:.85rem}
+  footer a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Crossover Gate — the skeptic's instrument</h1>
+  <p class="sub">A private framework predicts a structural crossover in neural entropy data clusters at a specific value. This is the gate that tries to <em>kill</em> that prediction: given a measured crossover and a null from surrogate data, does the clustering survive — or would any value fit noise just as well? A "signal" verdict is one the gate could not kill.</p>
+</header>
+
+<div class="thesis">
+  <strong>The estate's half of a research dyad.</strong> One side predicts (a framework: consciousness as κ-tuned self-reference, a crossover at a specific value). The other side measures (an engine: entropy at scale, on real data). This gate is the seam between them — it adjudicates the measurement against a surrogate null, so the number has to earn belief. We built the instrument to falsify our own favourite number.
+</div>
+
+<h2>Run the gate</h2>
+<div class="presets">
+  <button id="p-signal">a real signal</button>
+  <button id="p-fit">a lucky fit</button>
+  <button id="p-off">the prediction misses</button>
+</div>
+<div class="demo">
+  <div class="row">
+    <div><label>observed crossover</label><input id="obs" type="number" step="0.001" value="0.618"></div>
+    <div><label>predicted centre</label><input id="ctr" type="number" step="0.001" value="0.618"></div>
+    <div><label>band ± tol</label><input id="tol" type="number" step="0.001" value="0.02"></div>
+    <div><label>alpha</label><input id="alpha" type="number" step="0.01" value="0.05"></div>
+  </div>
+  <label>surrogate null (comma-separated crossover values from phase-randomised data)</label>
+  <input id="sur" type="text" style="max-width:none;width:100%" value="0.05,0.14,0.22,0.31,0.40,0.49,0.52,0.71,0.80,0.88,0.95,0.10,0.35,0.75,0.90,0.25,0.45,0.85,0.03,0.98">
+  <button class="go" id="go">test the crossover</button>
+  <div class="out" id="out">…</div>
+</div>
+
+<h2>The mechanism side — a falsifiable ceiling</h2>
+<div class="demo">
+  <p style="color:var(--dim);font-size:.9rem;margin-bottom:.5rem">The prediction has a mechanism, not just a number: self-reference caps at a depth a substrate of P elements can address — <code>Dmax(P) = ⌊P / ⌈log₂(P+1)⌉⌋</code>. Falsifiable arithmetic, checkable at any P.</p>
+  <div class="row"><div><label>substrate size P</label><input id="P" type="number" step="1" value="127"></div><button class="go" id="dgo">compute Dmax</button></div>
+  <div class="out" id="dout">…</div>
+</div>
+
+<div class="thesis wall">
+  <strong>The walls, held once.</strong> This gate produces a <em>structural correlate</em> claim at most — never a proof of consciousness (the hard problem stays the compass), and never a diagnosis: if the engine ever runs on clinical EEG (ASD, AD), a crossover is a structural correlate of the data, never a statement about a person or a condition. The demo below runs on clearly-synthetic numbers; the real test runs on the partner engine's measurements.
+</div>
+
+<footer>
+  <p>MIT · <a href="https://github.com/sjgant80-hub/crossover-gate">source &amp; mutation gate</a> — the decision on this page is the gated <code>kernel.mjs</code> verbatim, injected by <code>make-page.mjs</code> and diffed in CI. Pure client-side; nothing entered leaves the page.</p>
+</footer>
+</div>
+
+<script type="module">
+// ⟦KERNEL-BEGIN⟧ generated from kernel.mjs by make-page.mjs — do not edit here
+// crossover-gate — the witness half of a research dyad. The skeptic's instrument.
+//
+// A private framework predicts that a specific structural crossover in neural entropy data
+// clusters at a specific value (call it the BAND). An engine can measure where the crossover
+// falls, on real data, at scale. This kernel is neither the framework nor the engine — it is
+// the GATE BETWEEN them: given a measured crossover AND a null distribution from surrogate
+// data, does the clustering at the predicted band survive, or would any value fit noise just
+// as well? The gate is built to REFUSE the prediction — a "signal" verdict is one the gate
+// tried to kill and could not.
+//
+// This is the estate's role in the dyad (its prediction, its gate); the engine and the raw
+// measurement are the partner's sovereign half. The gate adjudicates measurements; it does
+// not generate data and it makes no clinical claim — a crossover in clinical EEG would be a
+// STRUCTURAL CORRELATE, never a diagnosis, and the hard problem of consciousness is not
+// addressed here at all. Pure and total; guards one-per-line.
+
+const isFin = (v) => Number.isFinite(v);
+
+function isObj(v) {
+  if (typeof v !== 'object') return false;
+  if (v === null) return false;
+  if (Array.isArray(v)) return false;
+  return true;
+}
+
+/**
+ * surrogateVerdict({ observed, surrogates, center, tol, alpha }) — the falsification gate.
+ *
+ *   observed    the crossover value the engine measured on the real data,
+ *   surrogates  crossover values measured the same way on SURROGATE datasets (phase-randomised
+ *               / IAAFT — same spectrum, structure destroyed): the null distribution,
+ *   center      the predicted band centre (the framework's number),
+ *   tol         the band half-width,
+ *   alpha       the significance level.
+ *
+ * p = fraction of surrogates that land in the band by chance. The observed value counts as a
+ * SIGNAL only if it is IN the band AND surrogates rarely are (p < alpha) — i.e. the clustering
+ * is not something noise reproduces. Verdicts:
+ *   'signal'                — in band, and the band is not reproduced by the null. Survives.
+ *   'null-indistinguishable'— in band, but surrogates land there too: a fit, not a finding.
+ *   'off-band'              — the crossover is real-valued but not at the predicted centre:
+ *                             the prediction is falsified, honestly.
+ */
+function surrogateVerdict(input) {
+  if (!isObj(input)) return { ok: false, why: 'surrogateVerdict reads { observed, surrogates, center, tol, alpha }' };
+  if (!isFin(input.observed)) return { ok: false, why: 'observed must be a finite number' };
+  if (!Array.isArray(input.surrogates)) return { ok: false, why: 'surrogates must be an array' };
+  if (input.surrogates.length === 0) return { ok: false, why: 'surrogates must be non-empty — a gate with no null proves nothing' };
+  if (!input.surrogates.every(isFin)) return { ok: false, why: 'every surrogate must be a finite number' };
+  if (!isFin(input.center)) return { ok: false, why: 'center (the predicted band centre) must be a finite number' };
+  if (!isFin(input.tol)) return { ok: false, why: 'tol must be a finite number' };
+  if (!(input.tol > 0)) return { ok: false, why: 'tol must be positive' };
+  if (!isFin(input.alpha)) return { ok: false, why: 'alpha must be a finite number' };
+  if (!(input.alpha > 0)) return { ok: false, why: 'alpha must be positive' };
+  if (!(input.alpha < 1)) return { ok: false, why: 'alpha must be below 1' };
+  const { observed, surrogates, center, tol, alpha } = input;
+  const inBand = Math.abs(observed - center) <= tol;
+  let hits = 0;
+  surrogates.forEach((s) => { if (Math.abs(s - center) <= tol) hits = hits + 1; });
+  const p = hits / surrogates.length;
+  let verdict = 'null-indistinguishable';
+  if (!inBand) verdict = 'off-band';
+  else if (p < alpha) verdict = 'signal';
+  const survives = verdict === 'signal';
+  return { ok: true, survives, verdict, inBand, p: Math.round(p * 10000) / 10000, hits, n: surrogates.length };
+}
+
+/**
+ * dmaxDepth(P) — the §T self-reference ceiling, as falsifiable arithmetic.
+ * A substrate of P elements can index at most P+1 states in ceil(log2(P+1)) bits, so the
+ * deepest self-model it can hold without collapse is floor(P / ceil(log2(P+1))). This is the
+ * mechanism side of the prediction: self-reference caps, and the cap is computable — a claim
+ * you can check against any P, not a hand-wave. (Structure lifts the cap by buying addressing
+ * room; that lift is a separate, later claim, not asserted here.)
+ */
+function dmaxDepth(P) {
+  if (!Number.isInteger(P)) return { ok: false, why: 'P must be an integer (substrate size)' };
+  if (P < 1) return { ok: false, why: 'P must be at least 1' };
+  const bits = Math.ceil(Math.log2(P + 1));
+  const depth = Math.floor(P / bits);
+  return { ok: true, depth, bits };
+}
+
+/**
+ * clusters(values, center, tol) — a descriptive helper: what fraction of a set of measured
+ * crossovers falls in the band, with the mean distance from centre. Descriptive only — it
+ * asserts nothing; surrogateVerdict is what decides whether a fraction is meaningful.
+ */
+function clusters(values, center, tol) {
+  if (!Array.isArray(values)) return { ok: false, why: 'values must be an array' };
+  if (values.length === 0) return { ok: false, why: 'values must be non-empty' };
+  if (!values.every(isFin)) return { ok: false, why: 'every value must be a finite number' };
+  if (!isFin(center)) return { ok: false, why: 'center must be a finite number' };
+  if (!isFin(tol)) return { ok: false, why: 'tol must be a finite number' };
+  if (!(tol > 0)) return { ok: false, why: 'tol must be positive' };
+  let inBand = 0;
+  let distSum = 0;
+  values.forEach((v) => {
+    if (Math.abs(v - center) <= tol) inBand = inBand + 1;
+    distSum = distSum + Math.abs(v - center);
+  });
+  return { ok: true, fraction: Math.round((inBand / values.length) * 10000) / 10000, meanDistance: Math.round((distSum / values.length) * 10000) / 10000, inBand, n: values.length };
+}
+// ⟦KERNEL-END⟧
+
+const $ = (id) => document.getElementById(id);
+const nums = (s) => s.split(',').map((x) => Number(x.trim())).filter((x) => Number.isFinite(x));
+$('p-signal').addEventListener('click', () => { $('obs').value = 0.618; $('sur').value = '0.05,0.14,0.22,0.31,0.40,0.49,0.52,0.71,0.80,0.88,0.95,0.10,0.35,0.75,0.90,0.25,0.45,0.85,0.03,0.98'; run(); });
+$('p-fit').addEventListener('click', () => { $('obs').value = 0.618; $('sur').value = '0.60,0.61,0.62,0.63,0.615,0.625,0.605,0.635,0.618,0.61,0.62,0.60,0.63,0.615,0.622,0.608,0.617,0.629,0.611,0.624'; run(); });
+$('p-off').addEventListener('click', () => { $('obs').value = 0.90; $('sur').value = '0.05,0.14,0.22,0.31,0.40,0.49,0.52,0.71,0.80,0.88,0.95,0.10,0.35,0.75,0.90,0.25,0.45,0.85,0.03,0.98'; run(); });
+
+function run() {
+  const r = surrogateVerdict({ observed: +$('obs').value, surrogates: nums($('sur').value), center: +$('ctr').value, tol: +$('tol').value, alpha: +$('alpha').value });
+  if (!r.ok) { $('out').innerHTML = 'refused — ' + r.why; return; }
+  const verdictText = { 'signal': 'SIGNAL — survives the null', 'null-indistinguishable': 'NULL-INDISTINGUISHABLE — a fit, not a finding', 'off-band': 'OFF-BAND — the prediction missed' }[r.verdict];
+  $('out').innerHTML = '<span class="v-' + r.verdict + '">' + verdictText + '</span>\n' +
+    'in band: ' + r.inBand + '  ·  p = ' + r.p + ' (surrogates in band: ' + r.hits + '/' + r.n + ')  ·  alpha ' + $('alpha').value;
+}
+$('go').addEventListener('click', run);
+$('dgo').addEventListener('click', () => {
+  const r = dmaxDepth(Math.trunc(+$('P').value));
+  $('dout').innerHTML = r.ok ? ('Dmax(' + Math.trunc(+$('P').value) + ') = ' + r.depth + '  (address bits: ' + r.bits + ')\nthe deepest self-model this substrate can hold without collapse') : ('refused — ' + r.why);
+});
+run();
+</script>
+</body>
+</html>
